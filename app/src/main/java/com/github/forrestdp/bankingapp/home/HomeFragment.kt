@@ -1,32 +1,24 @@
 package com.github.forrestdp.bankingapp.home
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.forrestdp.bankingapp.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.github.forrestdp.bankingapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
-    private lateinit var viewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    ): View {
+        val binding = FragmentHomeBinding.inflate(layoutInflater)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
+
+        return binding.root
+    }
 }
