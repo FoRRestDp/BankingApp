@@ -10,6 +10,7 @@ import com.github.forrestdp.bankingapp.utils.CurrencyCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.RoundingMode
 
 class HomeViewModel : ViewModel() {
     private val _currentUser = MutableLiveData(CardUser.defaultUser)
@@ -21,7 +22,7 @@ class HomeViewModel : ViewModel() {
     val cardNumber: LiveData<String> = _currentUser.map { it.cardNumber }
     val cardholderName: LiveData<String> = _currentUser.map { it.cardholderName }
     val validThruDate: LiveData<String> = _currentUser.map { it.validThruDate }
-    val balance: LiveData<String> = _currentUser.map { "$ ${it.balance}" }
+    val balance: LiveData<String> = _currentUser.map { "$ ${it.balance.setScale(2, RoundingMode.HALF_UP)}" }
     private val _currencyBalance = MediatorLiveData<String>()
     val currencyBalance: LiveData<String> = _currencyBalance
 
@@ -51,7 +52,7 @@ class HomeViewModel : ViewModel() {
                             CurrencyCode.USD -> currencies.getValue("USD").value
                             CurrencyCode.GBP -> currencies.getValue("GBP").value
                             CurrencyCode.EUR -> currencies.getValue("EUR").value
-                            CurrencyCode.RUB -> 1.0
+                            CurrencyCode.RUB -> 1.0.toBigDecimal()
                             null -> return@addSource
                         }
                         transaction.copy(currencyCode = code,
@@ -63,15 +64,15 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun renewCurrencyBalance(balance: String, code: CurrencyCode) {
-        val balanceDouble = balance.drop(1).toDouble()
+        val balanceDouble = balance.drop(2).toBigDecimal()
         val (currencyCoeff, badge) = when (code) {
             CurrencyCode.USD -> currencies.getValue("USD").value to "$"
             CurrencyCode.GBP -> currencies.getValue("GBP").value to "£"
             CurrencyCode.EUR -> currencies.getValue("EUR").value to "€"
-            CurrencyCode.RUB -> 1.0 to "₽"
+            CurrencyCode.RUB -> 1.0.toBigDecimal() to "₽"
         }
         _currencyBalance.value =
-            "$badge ${((currencies.getValue("USD").value * balanceDouble) / currencyCoeff)}"
+            "$badge ${((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).setScale(2, RoundingMode.HALF_UP)}"
     }
 
     val isGbpChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.GBP }

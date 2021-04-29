@@ -1,6 +1,7 @@
 package com.github.forrestdp.bankingapp.network.bankinginfo
 
 import com.squareup.moshi.Json
+import java.math.BigDecimal
 
 data class CardUser(
     @Json(name = "card_number")
@@ -11,7 +12,7 @@ data class CardUser(
     val cardholderName: String,
     @Json(name = "valid")
     val validThruDate: String,
-    val balance: Double,
+    val balance: BigDecimal,
     @Json(name = "transaction_history")
     val transactionHistory: List<Transaction>,
 ) {
@@ -21,7 +22,7 @@ data class CardUser(
             "mastercard",
             "Cardholder Name",
             "00/00",
-            -1.0,
+            (-1.0).toBigDecimal(),
             emptyList(),
         )
     }
