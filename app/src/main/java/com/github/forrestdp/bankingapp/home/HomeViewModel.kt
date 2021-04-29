@@ -16,15 +16,31 @@ class HomeViewModel : ViewModel() {
     private val _currentUser = MutableLiveData(CardUser.defaultUser)
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
-    private lateinit var users: List<CardUser>
+    var currentPosition: Int = 0
+        private set
+
+    lateinit var users: List<CardUser>
+        private set
     private lateinit var currencies: Map<String, Currency>
 
     val cardNumber: LiveData<String> = _currentUser.map { it.cardNumber }
     val cardholderName: LiveData<String> = _currentUser.map { it.cardholderName }
     val validThruDate: LiveData<String> = _currentUser.map { it.validThruDate }
-    val balance: LiveData<String> = _currentUser.map { "$ ${it.balance.setScale(2, RoundingMode.HALF_UP)}" }
+    val balance: LiveData<String> =
+        _currentUser.map { "$ ${it.balance.setScale(2, RoundingMode.HALF_UP)}" }
     private val _currencyBalance = MediatorLiveData<String>()
     val currencyBalance: LiveData<String> = _currencyBalance
+
+    private val _navigateToCards = MutableLiveData<Boolean?>()
+    val navigateToCards: LiveData<Boolean?> = _navigateToCards
+
+    fun startNavigatingToCards() {
+        _navigateToCards.value = true
+    }
+
+    fun doneNavigatingToCards() {
+        _navigateToCards.value = null
+    }
 
     private val _transactionHistory = MediatorLiveData<List<Transaction>>()
     val transactionHistory: LiveData<List<Transaction>> = _transactionHistory
@@ -44,7 +60,8 @@ class HomeViewModel : ViewModel() {
                 }
 
                 _transactionHistory.addSource(_currentUser) { user ->
-                    _transactionHistory.value = user.transactionHistory.map { it.copy(amount = it.amount.drop(1)) }
+                    _transactionHistory.value =
+                        user.transactionHistory.map { it.copy(amount = it.amount.drop(1)) }
                 }
                 _transactionHistory.addSource(_currentCurrency) { code ->
                     _transactionHistory.value = _transactionHistory.value?.map { transaction ->
@@ -72,12 +89,20 @@ class HomeViewModel : ViewModel() {
             CurrencyCode.RUB -> 1.0.toBigDecimal() to "₽"
         }
         _currencyBalance.value =
-            "$badge ${((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).setScale(2, RoundingMode.HALF_UP)}"
+            "$badge ${
+                ((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).setScale(2,
+                    RoundingMode.HALF_UP)
+            }"
     }
 
     val isGbpChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.GBP }
     val isEurChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.EUR }
     val isRubChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.RUB }
+
+    fun setNewUser(position: Int) {
+        _currentUser.value = users[position]
+        currentPosition = position
+    }
 
     fun toggleGbp() {
         toggleCurrency(CurrencyCode.GBP)
