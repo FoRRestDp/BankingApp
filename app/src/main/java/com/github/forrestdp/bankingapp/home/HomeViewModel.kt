@@ -21,24 +21,42 @@ class HomeViewModel : ViewModel() {
     val cardNumber: LiveData<String> = _currentUser.map { it.cardNumber }
     val cardholderName: LiveData<String> = _currentUser.map { it.cardholderName }
     val validThruDate: LiveData<String> = _currentUser.map { it.validThruDate }
-    val balance: LiveData<String> = _currentUser.map { "$${it.balance}" }
-    val currencyBalance = MediatorLiveData<String>()
-    val transactionHistory: LiveData<List<Transaction>> = _currentUser.map {
-        it.transactionHistory
-    }
+    val balance: LiveData<String> = _currentUser.map { "$ ${it.balance}" }
+    private val _currencyBalance = MediatorLiveData<String>()
+    val currencyBalance: LiveData<String> = _currencyBalance
+
+    private val _transactionHistory = MediatorLiveData<List<Transaction>>()
+    val transactionHistory: LiveData<List<Transaction>> = _transactionHistory
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             users = CardHoldersApi.retrofitService.getBankingInfo().users
-            _currentUser.postValue(users[1])
+            _currentUser.postValue(users[0])
             currencies = CurrencyInfoApi.retrofitService.getCurrencyInfo().currencies
 
             withContext(Dispatchers.Main) {
-                currencyBalance.addSource(balance) {
+                _currencyBalance.addSource(balance) {
                     renewCurrencyBalance(it!!, _currentCurrency.value!!)
                 }
-                currencyBalance.addSource(_currentCurrency) {
+                _currencyBalance.addSource(_currentCurrency) {
                     renewCurrencyBalance(balance.value!!, it!!)
+                }
+
+                _transactionHistory.addSource(_currentUser) { user ->
+                    _transactionHistory.value = user.transactionHistory.map { it.copy(amount = it.amount.drop(1)) }
+                }
+                _transactionHistory.addSource(_currentCurrency) { code ->
+                    _transactionHistory.value = _transactionHistory.value?.map { transaction ->
+                        val currencyCoeff = when (code) {
+                            CurrencyCode.USD -> currencies.getValue("USD").value
+                            CurrencyCode.GBP -> currencies.getValue("GBP").value
+                            CurrencyCode.EUR -> currencies.getValue("EUR").value
+                            CurrencyCode.RUB -> 1.0
+                            null -> return@addSource
+                        }
+                        transaction.copy(currencyCode = code,
+                            currencyMultiplier = (currencies.getValue("USD").value / currencyCoeff))
+                    }
                 }
             }
         }
@@ -46,14 +64,14 @@ class HomeViewModel : ViewModel() {
 
     private fun renewCurrencyBalance(balance: String, code: CurrencyCode) {
         val balanceDouble = balance.drop(1).toDouble()
-        val currencyCoeff = when (code) {
-            CurrencyCode.USD -> currencies.getValue("USD").value
-            CurrencyCode.GBP -> currencies.getValue("GBP").value
-            CurrencyCode.EUR -> currencies.getValue("EUR").value
-            CurrencyCode.RUB -> 1.0
+        val (currencyCoeff, badge) = when (code) {
+            CurrencyCode.USD -> currencies.getValue("USD").value to "$"
+            CurrencyCode.GBP -> currencies.getValue("GBP").value to "£"
+            CurrencyCode.EUR -> currencies.getValue("EUR").value to "€"
+            CurrencyCode.RUB -> 1.0 to "₽"
         }
-        currencyBalance.value =
-            ((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).toString()
+        _currencyBalance.value =
+            "$badge ${((currencies.getValue("USD").value * balanceDouble) / currencyCoeff)}"
     }
 
     val isGbpChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.GBP }

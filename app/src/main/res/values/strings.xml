@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Banking App</string>
-    <string name="money_with_currency">%1$s %2$s</string>
+    <string name="history_transaction_amount_in_currency_string"><p style="color:gray">- %1$s</p> %2$s</string>
+    <string name="history_transaction_amount_string">%1$s %2$s</string>
 </resources>

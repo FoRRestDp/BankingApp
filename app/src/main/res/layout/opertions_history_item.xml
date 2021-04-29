@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="kotlin.Pair"/>
         <variable
             name="transaction"
             type="com.github.forrestdp.bankingapp.network.bankinginfo.Transaction" />
@@ -31,11 +32,12 @@
 
             <ImageView
                 android:id="@+id/history_company_logo_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center_horizontal|center_vertical"
+                app:imageUrl="@{transaction.iconUrl}"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_netflix_logo" />
+                tools:srcCompat="@drawable/ic_netflix_logo" />
         </FrameLayout>
 
         <TextView
@@ -46,11 +48,11 @@
             android:layout_marginTop="1dp"
             android:fontFamily="@font/roboto"
             android:text="@{transaction.title}"
-            tools:text="Netfilx"
             android:textColor="@color/var_black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/frameLayout"
-            app:layout_constraintTop_toTopOf="@+id/frameLayout" />
+            app:layout_constraintTop_toTopOf="@+id/frameLayout"
+            tools:text="Netfilx" />
 
         <TextView
             android:id="@+id/history_date_text"
@@ -59,36 +61,38 @@
             android:layout_marginStart="17dp"
             android:fontFamily="@font/roboto"
             android:text="@{transaction.date}"
-            tools:text="15/12/2019"
             android:textColor="@color/gray"
             android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@+id/frameLayout"
-            app:layout_constraintTop_toBottomOf="@+id/history_company_name_text" />
+            app:layout_constraintTop_toBottomOf="@+id/history_company_name_text"
+            tools:text="15/12/2019" />
 
         <TextView
             android:id="@+id/history_amount_in_currency_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
-            app:transactionAmountInCurrencyFormatted="@{transaction}"
-            tools:text="- £ 7.99"
             android:text="- £ 7.99"
             android:textColor="@color/var_black"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:transactionAmountInCurrencyFormatted="@{transaction.amount}"
+            app:transactionCurrencyBadgeFormatted="@{transaction.currencyCode}"
+            app:transactionCurrencyMultiplier="@{transaction.currencyMultiplier}"
+            tools:text="- £ 7.99" />
 
         <TextView
             android:id="@+id/history_amount_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            app:transactionAmountFormatted="@{transaction}"
-            tools:text="$ 9.85"
             android:text="$ 9.85"
             android:textColor="@color/gray"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/history_amount_in_currency_text" />
+            app:layout_constraintTop_toBottomOf="@+id/history_amount_in_currency_text"
+            app:transactionAmountFormatted="@{transaction.amount}"
+            tools:text="$ 9.85" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
