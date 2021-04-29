@@ -1,79 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="52dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
+        <variable
+            name="transaction"
+            type="com.github.forrestdp.bankingapp.network.bankinginfo.Transaction" />
+    </data>
 
-        <View
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:background="@drawable/operations_history_icon_bg" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_netflix_logo" />
-    </FrameLayout>
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="1dp"
-        android:fontFamily="@font/roboto"
-        android:text="Netfilx"
-        android:textColor="@color/var_black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout" />
+            <View
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/operations_history_icon_bg" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:fontFamily="@font/roboto"
-        android:text="15/12/2019"
-        android:textColor="@color/gray"
-        android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            <ImageView
+                android:id="@+id/history_company_logo_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_netflix_logo" />
+        </FrameLayout>
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
-        android:text="- £ 7.99"
-        android:textColor="@color/var_black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/history_company_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/roboto"
+            android:text="@{transaction.title}"
+            tools:text="Netfilx"
+            android:textColor="@color/var_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="@+id/frameLayout" />
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:text="$ 9.85"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/history_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:fontFamily="@font/roboto"
+            android:text="@{transaction.date}"
+            tools:text="15/12/2019"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/history_company_name_text" />
+
+        <TextView
+            android:id="@+id/history_amount_in_currency_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            app:transactionAmountInCurrencyFormatted="@{transaction}"
+            tools:text="- £ 7.99"
+            android:text="- £ 7.99"
+            android:textColor="@color/var_black"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/history_amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            app:transactionAmountFormatted="@{transaction}"
+            tools:text="$ 9.85"
+            android:text="$ 9.85"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/history_amount_in_currency_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

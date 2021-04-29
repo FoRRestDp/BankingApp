@@ -3,6 +3,7 @@ package com.github.forrestdp.bankingapp.home
 import androidx.lifecycle.*
 import com.github.forrestdp.bankingapp.network.bankinginfo.CardHoldersApi
 import com.github.forrestdp.bankingapp.network.bankinginfo.CardUser
+import com.github.forrestdp.bankingapp.network.bankinginfo.Transaction
 import com.github.forrestdp.bankingapp.network.currencyinfo.Currency
 import com.github.forrestdp.bankingapp.network.currencyinfo.CurrencyInfoApi
 import com.github.forrestdp.bankingapp.utils.CurrencyCode
@@ -22,6 +23,9 @@ class HomeViewModel : ViewModel() {
     val validThruDate: LiveData<String> = _currentUser.map { it.validThruDate }
     val balance: LiveData<String> = _currentUser.map { "$${it.balance}" }
     val currencyBalance = MediatorLiveData<String>()
+    val transactionHistory: LiveData<List<Transaction>> = _currentUser.map {
+        it.transactionHistory
+    }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
