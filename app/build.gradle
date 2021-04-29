@@ -71,11 +71,23 @@ dependencies {
     // Testing Fragments in Isolation
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
+//    // Coroutines
+//    def coroutines_version = kotlin_version
+//
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
     //Retrofit
     def retrofit_version = "2.9.0"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // Moshi
+    def moshi_version = "1.12.0"
+
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
     //Room
     def room_version = "2.3.0"
