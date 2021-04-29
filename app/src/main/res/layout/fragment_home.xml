@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="homeViewModel"
             type="com.github.forrestdp.bankingapp.home.HomeViewModel" />
@@ -189,8 +191,10 @@
                     android:background="@drawable/currency_button_shape_unselected"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/roboto_medium"
+                    android:onClick="@{() -> homeViewModel.toggleGbp()}"
                     android:text="GBP"
                     android:textSize="16sp"
+                    android:visibility="@{homeViewModel.isGbpChecked() ? View.INVISIBLE : View.VISIBLE}"
                     app:icon="@drawable/ic_pound"
                     app:iconGravity="textTop"
                     app:iconPadding="16dp" />
@@ -202,10 +206,11 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/currency_button_shape_selected"
                     android:fontFamily="@font/roboto_medium"
+                    android:onClick="@{() -> homeViewModel.toggleGbp()}"
                     android:text="GBP"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:visibility="visible"
+                    android:visibility="@{homeViewModel.isGbpChecked() ? View.VISIBLE : View.INVISIBLE}"
                     app:icon="@drawable/ic_pound"
                     app:iconGravity="textTop"
                     app:iconPadding="16dp" />
@@ -228,8 +233,10 @@
                     android:background="@drawable/currency_button_shape_unselected"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/roboto_medium"
+                    android:onClick="@{() -> homeViewModel.toggleEur()}"
                     android:text="EUR"
                     android:textSize="16sp"
+                    android:visibility="@{homeViewModel.isEurChecked() ? View.INVISIBLE : View.VISIBLE}"
                     app:icon="@drawable/ic_euro"
                     app:iconGravity="textTop"
                     app:iconPadding="16dp" />
@@ -241,13 +248,15 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/currency_button_shape_selected"
                     android:fontFamily="@font/roboto_medium"
+                    android:onClick="@{() -> homeViewModel.toggleEur()}"
                     android:text="EUR"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:visibility="invisible"
+                    android:visibility="@{homeViewModel.isEurChecked() ? View.VISIBLE : View.INVISIBLE}"
                     app:icon="@drawable/ic_euro"
                     app:iconGravity="textTop"
-                    app:iconPadding="16dp" />
+                    app:iconPadding="16dp"
+                    tools:visibility="invisible" />
             </FrameLayout>
 
             <FrameLayout
@@ -268,8 +277,10 @@
                     android:background="@drawable/currency_button_shape_unselected"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="GBP"
+                    android:onClick="@{() -> homeViewModel.toggleRub()}"
+                    android:text="RUB"
                     android:textSize="16sp"
+                    android:visibility="@{homeViewModel.isRubChecked() ? View.INVISIBLE : View.VISIBLE}"
                     app:icon="@drawable/ic_ruble"
                     app:iconGravity="textTop"
                     app:iconPadding="16dp" />
@@ -281,18 +292,20 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/currency_button_shape_selected"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="GBP"
+                    android:onClick="@{() -> homeViewModel.toggleRub()}"
+                    android:text="RUB"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:visibility="invisible"
+                    android:visibility="@{homeViewModel.isRubChecked() ? View.VISIBLE : View.INVISIBLE}"
                     app:icon="@drawable/ic_ruble"
                     app:iconGravity="textTop"
-                    app:iconPadding="16dp" />
+                    app:iconPadding="16dp"
+                    tools:visibility="invisible" />
             </FrameLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="220dp"
+                android:layout_height="264dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="16dp"

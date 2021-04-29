@@ -1,8 +1,7 @@
-package com.github.forrestdp.bankingapp.network
+package com.github.forrestdp.bankingapp.network.bankinginfo
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -18,13 +17,13 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
-interface CardHoldersApiService {
+interface BankingInfoApiService {
     @GET("test/android/v1/users.json")
-    suspend fun getCardInfo(): BankingInfo
+    suspend fun getBankingInfo(): BankingInfo
 }
 
 object CardHoldersApi {
-    val retrofitService : CardHoldersApiService by lazy {
-        retrofit.create(CardHoldersApiService::class.java)
+    val retrofitService: BankingInfoApiService by lazy {
+        retrofit.create(BankingInfoApiService::class.java)
     }
 }

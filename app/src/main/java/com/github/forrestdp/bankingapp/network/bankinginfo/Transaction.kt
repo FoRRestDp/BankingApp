@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.network
+package com.github.forrestdp.bankingapp.network.bankinginfo
 
 import com.squareup.moshi.Json
 
