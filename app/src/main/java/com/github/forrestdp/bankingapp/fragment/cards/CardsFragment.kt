@@ -32,6 +32,9 @@ class CardsFragment : Fragment() {
         viewModel.shrunkCardInfos.observe(viewLifecycleOwner) {
             it?.let { adapter.submitList(it) }
         }
+        binding.backButtonImg.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         return binding.root
     }

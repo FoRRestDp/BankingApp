@@ -27,7 +27,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_mastercard_icon"
-            app:cardTypeImage="@{cardInfo.cardType}"/>
+            app:cardTypeImage="@{cardInfo.cardType}"
+            android:contentDescription="@string/cards_card_type_desc" />
 
         <TextView
             android:id="@+id/cards_card_number_text"
@@ -38,7 +39,7 @@
             android:text="@{cardInfo.cardNumber}"
             tools:text="4455 1223 3488 1000"
             android:textColor="@color/var_black"
-            android:textSize="16sp"
+            android:textSize="@dimen/cards_card_number_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cards_card_type_image"
             app:layout_constraintTop_toTopOf="parent" />
