@@ -9,7 +9,7 @@
 
         <variable
             name="homeViewModel"
-            type="com.github.forrestdp.bankingapp.home.HomeViewModel" />
+            type="com.github.forrestdp.bankingapp.viewmodel.CommonViewModel" />
     </data>
 
     <LinearLayout
@@ -44,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:shimmerLoadingStatus="@{homeViewModel.loadingStatus}"
-            app:shimmer_auto_start="true"
             tools:visibility="gone">
 
             <include layout="@layout/data_placeholder_layout" />
@@ -60,8 +59,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:src="@drawable/ic_baseline_cloud_off_24"
-                app:tint="@color/var_black" />
+                android:src="@drawable/ic_baseline_refresh_24"
+                app:tint="@color/var_black"
+                android:onClick="@{() -> homeViewModel.retryDataLoading()}"/>
 
         </FrameLayout>
 
@@ -73,7 +73,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".home.HomeFragment">
+                tools:context=".fragment.home.HomeFragment">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"
@@ -206,7 +206,7 @@
                             android:layout_marginStart="22dp"
                             android:layout_marginTop="35dp"
                             android:fontFamily="@font/roboto_medium"
-                            android:text="@{homeViewModel.currencyBalance}"
+                            android:text="@{homeViewModel.balanceInCurrency}"
                             android:textColor="@color/var_black"
                             android:textSize="28sp"
                             app:layout_constraintStart_toStartOf="parent"

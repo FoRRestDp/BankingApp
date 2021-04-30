@@ -1,18 +1,19 @@
-package com.github.forrestdp.bankingapp.home
+package com.github.forrestdp.bankingapp.viewmodel
 
 import androidx.lifecycle.*
-import com.github.forrestdp.bankingapp.network.bankinginfo.CardHoldersApi
-import com.github.forrestdp.bankingapp.network.bankinginfo.CardUser
-import com.github.forrestdp.bankingapp.network.bankinginfo.Transaction
-import com.github.forrestdp.bankingapp.network.currencyinfo.Currency
-import com.github.forrestdp.bankingapp.network.currencyinfo.CurrencyInfoApi
-import com.github.forrestdp.bankingapp.utils.CurrencyCode
+import com.github.forrestdp.bankingapp.fragment.home.LoadingStatus
+import com.github.forrestdp.bankingapp.repo.network.bankinginfo.CardHoldersApi
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.CardUser
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction
+import com.github.forrestdp.bankingapp.repo.model.currencyinfo.Currency
+import com.github.forrestdp.bankingapp.repo.network.currencyinfo.CurrencyInfoApi
+import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 
-class HomeViewModel : ViewModel() {
+class CommonViewModel : ViewModel() {
     private val _currentUser = MutableLiveData(CardUser.defaultUser)
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
@@ -21,7 +22,6 @@ class HomeViewModel : ViewModel() {
 
     var currentPosition: Int = 0
         private set
-
     lateinit var users: List<CardUser>
         private set
     private lateinit var currencies: Map<String, Currency>
@@ -31,10 +31,10 @@ class HomeViewModel : ViewModel() {
     val validThruDate: LiveData<String> = _currentUser.map { it.validThruDate }
     val balance: LiveData<String> =
         _currentUser.map { "$ ${it.balance.setScale(2, RoundingMode.HALF_UP)}" }
-    private val _currencyBalance = MediatorLiveData<String>()
-    val currencyBalance: LiveData<String> = _currencyBalance
-
     val cardType: LiveData<String> = _currentUser.map { it.cardType }
+
+    private val _balanceInCurrency = MediatorLiveData<String>()
+    val balanceInCurrency: LiveData<String> = _balanceInCurrency
 
     private val _navigateToCards = MutableLiveData<Boolean?>()
     val navigateToCards: LiveData<Boolean?> = _navigateToCards
@@ -51,6 +51,10 @@ class HomeViewModel : ViewModel() {
     val transactionHistory: LiveData<List<Transaction>> = _transactionHistory
 
     init {
+        loadData()
+    }
+
+    private fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _loadingStatus.postValue(LoadingStatus.LOADING)
@@ -90,10 +94,10 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun initCurrencyBalance() {
-        _currencyBalance.addSource(balance) {
+        _balanceInCurrency.addSource(balance) {
             renewCurrencyBalance(it!!, _currentCurrency.value!!)
         }
-        _currencyBalance.addSource(_currentCurrency) {
+        _balanceInCurrency.addSource(_currentCurrency) {
             renewCurrencyBalance(balance.value!!, it!!)
         }
     }
@@ -106,7 +110,7 @@ class HomeViewModel : ViewModel() {
             CurrencyCode.EUR -> currencies.getValue("EUR").value to "€"
             CurrencyCode.RUB -> 1.0.toBigDecimal() to "₽"
         }
-        _currencyBalance.value =
+        _balanceInCurrency.value =
             "$badge ${
                 ((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).setScale(2,
                     RoundingMode.HALF_UP)
@@ -140,5 +144,9 @@ class HomeViewModel : ViewModel() {
         } else {
             _currentCurrency.value = currencyCode
         }
+    }
+
+    fun retryDataLoading() {
+        loadData()
     }
 }

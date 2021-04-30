@@ -1,7 +1,8 @@
-package com.github.forrestdp.bankingapp
+package com.github.forrestdp.bankingapp.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.github.forrestdp.bankingapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

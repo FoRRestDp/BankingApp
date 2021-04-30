@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.home
+package com.github.forrestdp.bankingapp.fragment.home
 
 import android.view.View
 import android.widget.FrameLayout
@@ -9,7 +9,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.github.forrestdp.bankingapp.R
-import com.github.forrestdp.bankingapp.utils.CurrencyCode
+import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -72,7 +72,10 @@ fun FrameLayout.setLoadingStatus(loadingStatus: LoadingStatus?) {
 @BindingAdapter("shimmerLoadingStatus")
 fun ShimmerFrameLayout.setLoadingStatus(loadingStatus: LoadingStatus?) {
     when (loadingStatus) {
-        LoadingStatus.LOADING -> visibility = View.VISIBLE
+        LoadingStatus.LOADING -> {
+            visibility = View.VISIBLE
+            startShimmer()
+        }
         LoadingStatus.ERROR -> {
             visibility = View.GONE
             stopShimmer()

@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.network.currencyinfo
+package com.github.forrestdp.bankingapp.repo.model.currencyinfo
 
 import com.squareup.moshi.Json
 import java.math.BigDecimal

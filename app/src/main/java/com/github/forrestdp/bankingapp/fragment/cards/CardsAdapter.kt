@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.cards
+package com.github.forrestdp.bankingapp.fragment.cards
 
 
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.forrestdp.bankingapp.databinding.CardsListItemBinding
-import com.github.forrestdp.bankingapp.utils.ShrunkCardInfo
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 
 class CardsAdapter(private val selectedCardPosition: Int, private val clickListener: CardListener) : ListAdapter<ShrunkCardInfo, CardsAdapter.ViewHolder>(CardsDiffCallback()) {
 

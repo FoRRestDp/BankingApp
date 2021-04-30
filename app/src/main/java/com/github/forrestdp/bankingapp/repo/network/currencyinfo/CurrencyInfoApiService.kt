@@ -1,5 +1,6 @@
-package com.github.forrestdp.bankingapp.network.currencyinfo
+package com.github.forrestdp.bankingapp.repo.network.currencyinfo
 
+import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyInfo
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson

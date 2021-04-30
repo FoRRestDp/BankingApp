@@ -1,22 +1,17 @@
-package com.github.forrestdp.bankingapp.home
+package com.github.forrestdp.bankingapp.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.FragmentHomeBinding
+import com.github.forrestdp.bankingapp.viewmodel.CommonViewModel
 
 class HomeFragment : Fragment() {
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: CommonViewModel by activityViewModels()
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(

@@ -1,21 +1,20 @@
-package com.github.forrestdp.bankingapp.cards
+package com.github.forrestdp.bankingapp.fragment.cards
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.github.forrestdp.bankingapp.databinding.FragmentCardsBinding
-import com.github.forrestdp.bankingapp.home.HomeViewModel
-import com.github.forrestdp.bankingapp.network.bankinginfo.CardUser
-import com.github.forrestdp.bankingapp.utils.ShrunkCardInfo
+import com.github.forrestdp.bankingapp.viewmodel.CommonViewModel
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.CardUser
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 
 class CardsFragment : Fragment() {
 
-    private val viewModel: HomeViewModel by activityViewModels()
+    private val viewModel: CommonViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

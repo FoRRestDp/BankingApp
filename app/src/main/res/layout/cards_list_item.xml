@@ -6,10 +6,10 @@
     <data>
         <variable
             name="cardInfo"
-            type="com.github.forrestdp.bankingapp.utils.ShrunkCardInfo" />
+            type="com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo" />
         <variable
             name="clickListener"
-            type="com.github.forrestdp.bankingapp.cards.CardListener" />
+            type="com.github.forrestdp.bankingapp.fragment.cards.CardListener" />
 
     </data>
 

@@ -1,5 +1,6 @@
-package com.github.forrestdp.bankingapp.network.bankinginfo
+package com.github.forrestdp.bankingapp.repo.network.bankinginfo
 
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.BankingInfo
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson

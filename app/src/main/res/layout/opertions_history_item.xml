@@ -7,7 +7,7 @@
         <import type="kotlin.Pair"/>
         <variable
             name="transaction"
-            type="com.github.forrestdp.bankingapp.network.bankinginfo.Transaction" />
+            type="com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

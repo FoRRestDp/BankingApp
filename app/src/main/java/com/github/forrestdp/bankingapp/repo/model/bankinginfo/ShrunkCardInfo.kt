@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.utils
+package com.github.forrestdp.bankingapp.repo.model.bankinginfo
 
 data class ShrunkCardInfo(
     val id: Long,

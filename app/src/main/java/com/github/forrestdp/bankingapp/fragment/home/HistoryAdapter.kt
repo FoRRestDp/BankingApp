@@ -1,14 +1,12 @@
-package com.github.forrestdp.bankingapp.home
+package com.github.forrestdp.bankingapp.fragment.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.forrestdp.bankingapp.databinding.OpertionsHistoryItemBinding
-import com.github.forrestdp.bankingapp.network.bankinginfo.Transaction
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction
 
 class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(HistoryDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
