@@ -1,22 +1,20 @@
 package com.github.forrestdp.bankingapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.github.forrestdp.bankingapp.fragment.home.LoadingStatus
-import com.github.forrestdp.bankingapp.repo.network.bankinginfo.CardHoldersApi
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.CardUser
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction
 import com.github.forrestdp.bankingapp.repo.model.currencyinfo.Currency
-import com.github.forrestdp.bankingapp.repo.network.currencyinfo.CurrencyInfoApi
 import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
+import com.github.forrestdp.bankingapp.repo.network.bankinginfo.CardHoldersApi
+import com.github.forrestdp.bankingapp.repo.network.currencyinfo.CurrencyInfoApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.IllegalStateException
 import java.math.RoundingMode
 
-class CommonViewModel : ViewModel() {
+class CommonViewModel(lastPosition: Int) : ViewModel() {
     private val _currentUser = MediatorLiveData<CardUser>()
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
@@ -26,7 +24,7 @@ class CommonViewModel : ViewModel() {
     private val _users = MutableLiveData<List<CardUser>>()
     private val _currencies = MutableLiveData<Map<String, Currency>>()
 
-    private val _currentPosition = MutableLiveData(0)
+    private val _currentPosition = MutableLiveData(lastPosition)
     val currentPosition: LiveData<Int> = _currentPosition
 
     val shrunkCardInfos: LiveData<List<ShrunkCardInfo>> = _users.map { list ->
@@ -73,7 +71,6 @@ class CommonViewModel : ViewModel() {
                     _loadingStatus.value = LoadingStatus.DONE
                 }
             } catch (e: Exception) {
-                Log.e("CommonViewModel", e.toString())
                 _loadingStatus.postValue(LoadingStatus.ERROR)
             }
         }

@@ -1,5 +1,6 @@
 package com.github.forrestdp.bankingapp.fragment.cards
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.FragmentCardsBinding
 import com.github.forrestdp.bankingapp.viewmodel.CommonViewModel
+import com.github.forrestdp.bankingapp.viewmodel.CommonViewModelFactory
 
 class CardsFragment : Fragment() {
 
