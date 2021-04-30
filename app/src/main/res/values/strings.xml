@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">Banking App</string>
-    <string name="history_transaction_amount_in_currency_string"><p style="color:gray">- %1$s</p> %2$s</string>
-    <string name="history_transaction_amount_string">%1$s %2$s</string>
+    <string name="history_transaction_amount_in_currency_string" translatable="false"><p style="color:gray">- %1$s</p> %2$s</string>
+    <string name="history_transaction_amount_string" translatable="false">%1$s %2$s</string>
     <string name="cards_card_type_desc">Card Type</string>
     <string name="change_currency">Change currency</string>
     <string name="my_cards">My cards</string>
     <string name="main">Main</string>
     <string name="valid_thru">Valid thru</string>
     <string name="your_balance">Your balance</string>
-    <string name="gbp">GBP</string>
-    <string name="eur">EUR</string>
-    <string name="rub">RUB</string>
+    <string name="gbp" translatable="false">GBP</string>
+    <string name="eur" translatable="false">EUR</string>
+    <string name="rub" translatable="false">RUB</string>
     <string name="history">History</string>
-    <string name="preference_last_position_key">com.github.forrestdp.bankingapp.LAST_POSITION</string>
+    <string name="preference_last_position_key" translatable="false">com.github.forrestdp.bankingapp.LAST_POSITION</string>
 </resources>
