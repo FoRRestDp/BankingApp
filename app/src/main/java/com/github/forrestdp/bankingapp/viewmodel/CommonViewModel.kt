@@ -127,7 +127,7 @@ class CommonViewModel(lastPosition: Int) : ViewModel() {
     }
 
     private fun renewCurrencyBalance(balance: String, code: CurrencyCode) {
-        val balanceDouble = if (balance.isEmpty())
+        val balanceDouble = if (balance.isNotEmpty())
             balance.drop(2).toBigDecimal()
         else
             (-1.0).toBigDecimal()
