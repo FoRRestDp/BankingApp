@@ -1,10 +1,13 @@
 package com.github.forrestdp.bankingapp.home
 
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.utils.CurrencyCode
 import java.math.BigDecimal
@@ -54,5 +57,29 @@ fun ImageView.setCardTypeImage(cardType: String?) {
             "unionpay" -> R.drawable.ic_unionpay_icom
             else -> R.drawable.ic_blue_circle
         })
+    }
+}
+
+@BindingAdapter("loadingStatus")
+fun FrameLayout.setLoadingStatus(loadingStatus: LoadingStatus?) {
+    when (loadingStatus) {
+        LoadingStatus.LOADING -> visibility = View.GONE
+        LoadingStatus.ERROR -> visibility = View.VISIBLE
+        LoadingStatus.DONE -> visibility = View.GONE
+    }
+}
+
+@BindingAdapter("shimmerLoadingStatus")
+fun ShimmerFrameLayout.setLoadingStatus(loadingStatus: LoadingStatus?) {
+    when (loadingStatus) {
+        LoadingStatus.LOADING -> visibility = View.VISIBLE
+        LoadingStatus.ERROR -> {
+            visibility = View.GONE
+            stopShimmer()
+        }
+        LoadingStatus.DONE -> {
+            visibility = View.GONE
+            stopShimmer()
+        }
     }
 }

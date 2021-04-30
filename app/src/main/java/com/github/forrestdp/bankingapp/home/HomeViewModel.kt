@@ -16,11 +16,8 @@ class HomeViewModel : ViewModel() {
     private val _currentUser = MutableLiveData(CardUser.defaultUser)
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
-    private val _dataLoadingStarted = MutableLiveData<Boolean>()
-    val dataLoadingStarted: LiveData<Boolean> = _dataLoadingStarted
-
-    private val _dataLoadingCompleted = MutableLiveData<Boolean>()
-    val dataLoadingCompleted: LiveData<Boolean> = _dataLoadingCompleted
+    private val _loadingStatus = MutableLiveData(LoadingStatus.LOADING)
+    val loadingStatus: LiveData<LoadingStatus> = _loadingStatus
 
     var currentPosition: Int = 0
         private set
@@ -55,37 +52,49 @@ class HomeViewModel : ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            users = CardHoldersApi.retrofitService.getBankingInfo().users
-            _currentUser.postValue(users[0])
-            currencies = CurrencyInfoApi.retrofitService.getCurrencyInfo().currencies
+            try {
+                _loadingStatus.postValue(LoadingStatus.LOADING)
+                users = CardHoldersApi.retrofitService.getBankingInfo().users
+                _currentUser.postValue(users[0])
+                currencies = CurrencyInfoApi.retrofitService.getCurrencyInfo().currencies
 
-            withContext(Dispatchers.Main) {
-                _currencyBalance.addSource(balance) {
-                    renewCurrencyBalance(it!!, _currentCurrency.value!!)
+                withContext(Dispatchers.Main) {
+                    initCurrencyBalance()
+                    initTransactionHistory()
+                    _loadingStatus.value = LoadingStatus.DONE
                 }
-                _currencyBalance.addSource(_currentCurrency) {
-                    renewCurrencyBalance(balance.value!!, it!!)
-                }
-
-                _transactionHistory.addSource(_currentUser) { user ->
-                    _transactionHistory.value =
-                        user.transactionHistory.map { it.copy(amount = it.amount.drop(1)) }
-                }
-                _transactionHistory.addSource(_currentCurrency) { code ->
-                    _transactionHistory.value = _transactionHistory.value?.map { transaction ->
-                        val currencyCoeff = when (code) {
-                            CurrencyCode.USD -> currencies.getValue("USD").value
-                            CurrencyCode.GBP -> currencies.getValue("GBP").value
-                            CurrencyCode.EUR -> currencies.getValue("EUR").value
-                            CurrencyCode.RUB -> 1.0.toBigDecimal()
-                            null -> return@addSource
-                        }
-                        transaction.copy(currencyCode = code,
-                            currencyMultiplier = (currencies.getValue("USD").value / currencyCoeff))
-                    }
-                }
-                _dataLoadingCompleted.value = true
+            } catch (e: Exception) {
+                _loadingStatus.postValue(LoadingStatus.ERROR)
             }
+        }
+    }
+
+    private fun initTransactionHistory() {
+        _transactionHistory.addSource(_currentUser) { user ->
+            _transactionHistory.value =
+                user.transactionHistory.map { it.copy(amount = it.amount.drop(1)) }
+        }
+        _transactionHistory.addSource(_currentCurrency) { code ->
+            _transactionHistory.value = _transactionHistory.value?.map { transaction ->
+                val currencyCoeff = when (code) {
+                    CurrencyCode.USD -> currencies.getValue("USD").value
+                    CurrencyCode.GBP -> currencies.getValue("GBP").value
+                    CurrencyCode.EUR -> currencies.getValue("EUR").value
+                    CurrencyCode.RUB -> 1.0.toBigDecimal()
+                    null -> return@addSource
+                }
+                transaction.copy(currencyCode = code,
+                    currencyMultiplier = (currencies.getValue("USD").value / currencyCoeff))
+            }
+        }
+    }
+
+    private fun initCurrencyBalance() {
+        _currencyBalance.addSource(balance) {
+            renewCurrencyBalance(it!!, _currentCurrency.value!!)
+        }
+        _currencyBalance.addSource(_currentCurrency) {
+            renewCurrencyBalance(balance.value!!, it!!)
         }
     }
 

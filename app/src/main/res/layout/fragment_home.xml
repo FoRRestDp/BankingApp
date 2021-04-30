@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme"/>
+                android:theme="?attr/actionBarTheme" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,10 +43,27 @@
             android:id="@+id/shimmer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:visibility="gone"
-            app:shimmer_auto_start="true">
-            <include layout="@layout/data_placeholder_layout"/>
+            app:shimmerLoadingStatus="@{homeViewModel.loadingStatus}"
+            app:shimmer_auto_start="true"
+            tools:visibility="gone">
+
+            <include layout="@layout/data_placeholder_layout" />
         </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:loadingStatus="@{homeViewModel.loadingStatus}"
+            tools:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/ic_baseline_cloud_off_24"
+                app:tint="@color/var_black" />
+
+        </FrameLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -99,10 +116,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="22dp"
                             android:layout_marginTop="32dp"
-                            tools:src="@drawable/ic_mastercard_icon"
                             app:cardTypeImage="@{homeViewModel.cardType}"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@drawable/ic_mastercard_icon" />
 
                         <ImageView
                             android:id="@+id/home_avatar_image"
