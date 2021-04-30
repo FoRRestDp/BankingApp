@@ -13,8 +13,11 @@ import java.math.BigDecimal
 const val BASE_URL = "https://hr.peterpartner.net/"
 
 object BigDecimalAdapter {
-    @FromJson fun fromJson(json: String) = BigDecimal(json)
-    @ToJson fun toJson(value: BigDecimal) = value.toString()
+    @FromJson
+    fun fromJson(json: String) = BigDecimal(json)
+
+    @ToJson
+    fun toJson(value: BigDecimal) = value.toString()
 }
 
 private val moshi = Moshi.Builder()

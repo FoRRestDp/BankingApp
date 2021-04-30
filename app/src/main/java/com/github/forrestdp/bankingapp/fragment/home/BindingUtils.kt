@@ -13,8 +13,14 @@ import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-@BindingAdapter("transactionAmountInCurrencyFormatted", "transactionCurrencyBadgeFormatted", "transactionCurrencyMultiplier")
-fun TextView.setTransactionAmountFormatted(amount: String?, currencyCode: CurrencyCode?, multiplier: BigDecimal?) {
+@BindingAdapter("transactionAmountInCurrencyFormatted",
+    "transactionCurrencyBadgeFormatted",
+    "transactionCurrencyMultiplier")
+fun TextView.setTransactionAmountFormatted(
+    amount: String?,
+    currencyCode: CurrencyCode?,
+    multiplier: BigDecimal?,
+) {
     if (amount != null && currencyCode != null && multiplier != null) {
         val char = when (currencyCode) {
             CurrencyCode.USD -> "$"

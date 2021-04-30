@@ -11,7 +11,7 @@ import com.github.forrestdp.bankingapp.databinding.FragmentHomeBinding
 import com.github.forrestdp.bankingapp.viewmodel.CommonViewModel
 
 class HomeFragment : Fragment() {
-    private val homeViewModel: CommonViewModel by activityViewModels()
+    private val viewModel: CommonViewModel by activityViewModels()
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -20,20 +20,20 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.homeViewModel = homeViewModel
+        binding.homeViewModel = viewModel
 
         val adapter = HistoryAdapter()
         binding.homeTransactionHistoryList.adapter = adapter
 
-        homeViewModel.transactionHistory.observe(viewLifecycleOwner) {
+        viewModel.transactionHistory.observe(viewLifecycleOwner) {
             it?.let { adapter.submitList(it) }
         }
 
-        homeViewModel.navigateToCards.observe(viewLifecycleOwner) {
+        viewModel.navigateToCards.observe(viewLifecycleOwner) {
             if (it != null) {
                 findNavController()
                     .navigate(HomeFragmentDirections.actionHomeFragmentToCardsFragment())
-                homeViewModel.doneNavigatingToCards()
+                viewModel.doneNavigatingToCards()
             }
         }
 

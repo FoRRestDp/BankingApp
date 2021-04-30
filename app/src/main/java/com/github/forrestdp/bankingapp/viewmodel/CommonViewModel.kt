@@ -1,9 +1,11 @@
 package com.github.forrestdp.bankingapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.github.forrestdp.bankingapp.fragment.home.LoadingStatus
 import com.github.forrestdp.bankingapp.repo.network.bankinginfo.CardHoldersApi
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.CardUser
+import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction
 import com.github.forrestdp.bankingapp.repo.model.currencyinfo.Currency
 import com.github.forrestdp.bankingapp.repo.network.currencyinfo.CurrencyInfoApi
@@ -11,20 +13,27 @@ import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.IllegalStateException
 import java.math.RoundingMode
 
 class CommonViewModel : ViewModel() {
-    private val _currentUser = MutableLiveData(CardUser.defaultUser)
+    private val _currentUser = MediatorLiveData<CardUser>()
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
     private val _loadingStatus = MutableLiveData(LoadingStatus.LOADING)
     val loadingStatus: LiveData<LoadingStatus> = _loadingStatus
 
-    var currentPosition: Int = 0
-        private set
-    lateinit var users: List<CardUser>
-        private set
-    private lateinit var currencies: Map<String, Currency>
+    private val _users = MutableLiveData<List<CardUser>>()
+    private val _currencies = MutableLiveData<Map<String, Currency>>()
+
+    private val _currentPosition = MutableLiveData(0)
+    val currentPosition: LiveData<Int> = _currentPosition
+
+    val shrunkCardInfos: LiveData<List<ShrunkCardInfo>> = _users.map { list ->
+        list.mapIndexed { i: Int, cardUser: CardUser ->
+            ShrunkCardInfo(i.toLong(), cardUser.cardNumber, cardUser.cardType)
+        }
+    }
 
     val cardNumber: LiveData<String> = _currentUser.map { it.cardNumber }
     val cardholderName: LiveData<String> = _currentUser.map { it.cardholderName }
@@ -39,16 +48,12 @@ class CommonViewModel : ViewModel() {
     private val _navigateToCards = MutableLiveData<Boolean?>()
     val navigateToCards: LiveData<Boolean?> = _navigateToCards
 
-    fun startNavigatingToCards() {
-        _navigateToCards.value = true
-    }
-
-    fun doneNavigatingToCards() {
-        _navigateToCards.value = null
-    }
-
     private val _transactionHistory = MediatorLiveData<List<Transaction>>()
     val transactionHistory: LiveData<List<Transaction>> = _transactionHistory
+
+    val isGbpChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.GBP }
+    val isEurChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.EUR }
+    val isRubChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.RUB }
 
     init {
         loadData()
@@ -58,18 +63,28 @@ class CommonViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _loadingStatus.postValue(LoadingStatus.LOADING)
-                users = CardHoldersApi.retrofitService.getBankingInfo().users
-                _currentUser.postValue(users[0])
-                currencies = CurrencyInfoApi.retrofitService.getCurrencyInfo().currencies
+                _users.postValue(CardHoldersApi.retrofitService.getBankingInfo().users)
+                _currencies.postValue(CurrencyInfoApi.retrofitService.getCurrencyInfo().currencies)
 
                 withContext(Dispatchers.Main) {
+                    initCurrentUser()
                     initCurrencyBalance()
                     initTransactionHistory()
                     _loadingStatus.value = LoadingStatus.DONE
                 }
             } catch (e: Exception) {
+                Log.e("CommonViewModel", e.toString())
                 _loadingStatus.postValue(LoadingStatus.ERROR)
             }
+        }
+    }
+
+    private fun initCurrentUser() {
+        _currentUser.addSource(_users) { list ->
+            _currentUser.value = list[_currentPosition.value ?: 0]
+        }
+        _currentUser.addSource(_currentPosition) { position ->
+            _currentUser.value = _users.value?.get(position)
         }
     }
 
@@ -81,14 +96,16 @@ class CommonViewModel : ViewModel() {
         _transactionHistory.addSource(_currentCurrency) { code ->
             _transactionHistory.value = _transactionHistory.value?.map { transaction ->
                 val currencyCoeff = when (code) {
-                    CurrencyCode.USD -> currencies.getValue("USD").value
-                    CurrencyCode.GBP -> currencies.getValue("GBP").value
-                    CurrencyCode.EUR -> currencies.getValue("EUR").value
+                    CurrencyCode.USD -> _currencies.value?.getValue("USD")?.value
+                    CurrencyCode.GBP -> _currencies.value?.getValue("GBP")?.value
+                    CurrencyCode.EUR -> _currencies.value?.getValue("EUR")?.value
                     CurrencyCode.RUB -> 1.0.toBigDecimal()
                     null -> return@addSource
                 }
                 transaction.copy(currencyCode = code,
-                    currencyMultiplier = (currencies.getValue("USD").value / currencyCoeff))
+                    currencyMultiplier = (_currencies.value?.getValue("USD")
+                        ?.value?.div(currencyCoeff ?: 0.0.toBigDecimal()))
+                        ?: throw IllegalStateException("Something went wrong"))
             }
         }
     }
@@ -105,25 +122,29 @@ class CommonViewModel : ViewModel() {
     private fun renewCurrencyBalance(balance: String, code: CurrencyCode) {
         val balanceDouble = balance.drop(2).toBigDecimal()
         val (currencyCoeff, badge) = when (code) {
-            CurrencyCode.USD -> currencies.getValue("USD").value to "$"
-            CurrencyCode.GBP -> currencies.getValue("GBP").value to "£"
-            CurrencyCode.EUR -> currencies.getValue("EUR").value to "€"
+            CurrencyCode.USD -> _currencies.value?.getValue("USD")?.value to "$"
+            CurrencyCode.GBP -> _currencies.value?.getValue("GBP")?.value to "£"
+            CurrencyCode.EUR -> _currencies.value?.getValue("EUR")?.value to "€"
             CurrencyCode.RUB -> 1.0.toBigDecimal() to "₽"
         }
         _balanceInCurrency.value =
             "$badge ${
-                ((currencies.getValue("USD").value * balanceDouble) / currencyCoeff).setScale(2,
+                ((_currencies.value?.getValue("USD")?.value!! * balanceDouble) / currencyCoeff!!).setScale(
+                    2,
                     RoundingMode.HALF_UP)
             }"
     }
 
-    val isGbpChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.GBP }
-    val isEurChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.EUR }
-    val isRubChecked: LiveData<Boolean> = _currentCurrency.map { it == CurrencyCode.RUB }
+    fun startNavigatingToCards() {
+        _navigateToCards.value = true
+    }
+
+    fun doneNavigatingToCards() {
+        _navigateToCards.value = null
+    }
 
     fun setNewUser(position: Int) {
-        _currentUser.value = users[position]
-        currentPosition = position
+        _currentPosition.value = position
     }
 
     fun toggleGbp() {

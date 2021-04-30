@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.forrestdp.bankingapp.databinding.CardsListItemBinding
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 
-class CardsAdapter(private val selectedCardPosition: Int, private val clickListener: CardListener) : ListAdapter<ShrunkCardInfo, CardsAdapter.ViewHolder>(CardsDiffCallback()) {
+class CardsAdapter(private val selectedCardPosition: Int, private val clickListener: CardListener) :
+    ListAdapter<ShrunkCardInfo, CardsAdapter.ViewHolder>(CardsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -21,7 +22,8 @@ class CardsAdapter(private val selectedCardPosition: Int, private val clickListe
         holder.bind(item, position == selectedCardPosition, clickListener)
     }
 
-    class ViewHolder private constructor(private val binding: CardsListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(private val binding: CardsListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ShrunkCardInfo, isSelected: Boolean, clickListener: CardListener) {
             binding.cardInfo = item
             if (isSelected) {

@@ -15,6 +15,7 @@ const val BASE_URL = "https://www.cbr-xml-daily.ru/"
 object BigDecimalAdapter {
     @FromJson
     fun fromJson(json: String) = BigDecimal(json)
+
     @ToJson
     fun toJson(value: BigDecimal) = value.toString()
 }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.forrestdp.bankingapp.databinding.OpertionsHistoryItemBinding
+import com.github.forrestdp.bankingapp.databinding.TransactionsHistoryItemBinding
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction
 
 class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(HistoryDiffCallback()) {
@@ -18,7 +18,8 @@ class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(Histo
         holder.bind(item)
     }
 
-    class ViewHolder private constructor(private val binding: OpertionsHistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(private val binding: TransactionsHistoryItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Transaction) {
             binding.transaction = item
             binding.executePendingBindings()
@@ -27,7 +28,7 @@ class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(Histo
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = OpertionsHistoryItemBinding.inflate(layoutInflater, parent ,false)
+                val binding = TransactionsHistoryItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
@@ -40,5 +41,4 @@ class HistoryDiffCallback : DiffUtil.ItemCallback<Transaction>() {
 
     override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean =
         oldItem == newItem
-
 }
