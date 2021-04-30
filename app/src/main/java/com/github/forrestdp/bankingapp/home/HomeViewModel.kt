@@ -16,6 +16,12 @@ class HomeViewModel : ViewModel() {
     private val _currentUser = MutableLiveData(CardUser.defaultUser)
     private val _currentCurrency = MutableLiveData(CurrencyCode.USD)
 
+    private val _dataLoadingStarted = MutableLiveData<Boolean>()
+    val dataLoadingStarted: LiveData<Boolean> = _dataLoadingStarted
+
+    private val _dataLoadingCompleted = MutableLiveData<Boolean>()
+    val dataLoadingCompleted: LiveData<Boolean> = _dataLoadingCompleted
+
     var currentPosition: Int = 0
         private set
 
@@ -78,6 +84,7 @@ class HomeViewModel : ViewModel() {
                             currencyMultiplier = (currencies.getValue("USD").value / currencyCoeff))
                     }
                 }
+                _dataLoadingCompleted.value = true
             }
         }
     }

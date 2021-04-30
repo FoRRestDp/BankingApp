@@ -17,12 +17,13 @@ import com.github.forrestdp.bankingapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels()
+    lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.homeViewModel = homeViewModel
 
@@ -41,6 +42,23 @@ class HomeFragment : Fragment() {
             }
         }
 
+        homeViewModel.dataLoadingCompleted.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.shimmer.stopShimmer()
+                binding.shimmer.visibility = View.GONE
+            }
+        }
+
         return binding.root
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        binding.shimmer.startShimmer()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        binding.shimmer.stopShimmer()
+//    }
 }
