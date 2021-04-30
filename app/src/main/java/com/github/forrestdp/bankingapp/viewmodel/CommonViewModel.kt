@@ -78,10 +78,18 @@ class CommonViewModel(lastPosition: Int) : ViewModel() {
 
     private fun initCurrentUser() {
         _currentUser.addSource(_users) { list ->
-            _currentUser.value = list[_currentPosition.value ?: 0]
+            renewCurrentUser(list, _currentPosition.value ?: 0)
         }
         _currentUser.addSource(_currentPosition) { position ->
-            _currentUser.value = _users.value?.get(position)
+            renewCurrentUser(_users.value ?: emptyList(), position)
+        }
+    }
+
+    private fun renewCurrentUser(list: List<CardUser>, pos: Int) {
+        when {
+            list.isEmpty() -> _currentUser.value = CardUser.defaultUser
+            pos >= list.size || pos <= 0 -> _currentUser.value = list[0]
+            else -> _currentUser.value = list[pos]
         }
     }
 
@@ -93,16 +101,18 @@ class CommonViewModel(lastPosition: Int) : ViewModel() {
         _transactionHistory.addSource(_currentCurrency) { code ->
             _transactionHistory.value = _transactionHistory.value?.map { transaction ->
                 val currencyCoeff = when (code) {
-                    CurrencyCode.USD -> _currencies.value?.getValue("USD")?.value
-                    CurrencyCode.GBP -> _currencies.value?.getValue("GBP")?.value
-                    CurrencyCode.EUR -> _currencies.value?.getValue("EUR")?.value
+                    CurrencyCode.USD -> _currencies.value?.get("USD")?.value
+                    CurrencyCode.GBP -> _currencies.value?.get("GBP")?.value
+                    CurrencyCode.EUR -> _currencies.value?.get("EUR")?.value
                     CurrencyCode.RUB -> 1.0.toBigDecimal()
                     null -> return@addSource
-                }
-                transaction.copy(currencyCode = code,
+                } ?: return@addSource
+                transaction.copy(
+                    currencyCode = code,
                     currencyMultiplier = (_currencies.value?.getValue("USD")
-                        ?.value?.div(currencyCoeff ?: 0.0.toBigDecimal()))
-                        ?: throw IllegalStateException("Something went wrong"))
+                        ?.value?.div(currencyCoeff))
+                        ?: throw IllegalStateException("Something went wrong")
+                )
             }
         }
     }
@@ -117,7 +127,10 @@ class CommonViewModel(lastPosition: Int) : ViewModel() {
     }
 
     private fun renewCurrencyBalance(balance: String, code: CurrencyCode) {
-        val balanceDouble = balance.drop(2).toBigDecimal()
+        val balanceDouble = if (balance.isEmpty())
+            balance.drop(2).toBigDecimal()
+        else
+            (-1.0).toBigDecimal()
         val (currencyCoeff, badge) = when (code) {
             CurrencyCode.USD -> _currencies.value?.getValue("USD")?.value to "$"
             CurrencyCode.GBP -> _currencies.value?.getValue("GBP")?.value to "£"
@@ -128,7 +141,8 @@ class CommonViewModel(lastPosition: Int) : ViewModel() {
             "$badge ${
                 ((_currencies.value?.getValue("USD")?.value!! * balanceDouble) / currencyCoeff!!).setScale(
                     2,
-                    RoundingMode.HALF_UP)
+                    RoundingMode.HALF_UP
+                )
             }"
     }
 

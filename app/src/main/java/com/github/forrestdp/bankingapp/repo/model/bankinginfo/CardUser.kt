@@ -18,4 +18,16 @@ data class CardUser(
     val balance: BigDecimal,
     @Json(name = "transaction_history")
     val transactionHistory: List<Transaction>,
-)
+) {
+    companion object {
+        val defaultUser = CardUser(
+            UUID.randomUUID(),
+            "0000 0000 0000 0000",
+            "mastercard",
+            "Cardholder Name",
+            "00/00",
+            (-1.0).toBigDecimal(),
+            emptyList(),
+        )
+    }
+}
