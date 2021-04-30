@@ -44,3 +44,15 @@ fun ImageView.bindImage(imageUrl: String?) {
             .into(this)
     }
 }
+
+@BindingAdapter("cardTypeImage")
+fun ImageView.setCardTypeImage(cardType: String?) {
+    if (cardType != null) {
+        setImageResource(when (cardType) {
+            "mastercard" -> R.drawable.ic_mastercard_icon
+            "visa" -> R.drawable.ic_visa_icon
+            "unionpay" -> R.drawable.ic_unionpay_icom
+            else -> R.drawable.ic_blue_circle
+        })
+    }
+}

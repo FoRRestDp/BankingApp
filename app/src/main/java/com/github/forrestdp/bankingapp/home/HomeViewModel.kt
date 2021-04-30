@@ -31,6 +31,8 @@ class HomeViewModel : ViewModel() {
     private val _currencyBalance = MediatorLiveData<String>()
     val currencyBalance: LiveData<String> = _currencyBalance
 
+    val cardType: LiveData<String> = _currentUser.map { it.cardType }
+
     private val _navigateToCards = MutableLiveData<Boolean?>()
     val navigateToCards: LiveData<Boolean?> = _navigateToCards
 
