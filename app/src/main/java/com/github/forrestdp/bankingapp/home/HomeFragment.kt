@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.fragment.home
+package com.github.forrestdp.bankingapp.home
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -19,13 +19,12 @@ import com.github.forrestdp.bankingapp.utils.getColor
 import com.github.forrestdp.bankingapp.utils.getDrawable
 import com.github.forrestdp.bankingapp.utils.launchAndCollectIn
 import com.github.forrestdp.bankingapp.utils.setCardTypeImage
-import com.github.forrestdp.bankingapp.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel by viewModels<HomeViewModel>()
 
     private val binding by viewBinding(FragmentHomeBinding::bind)
 

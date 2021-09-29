@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.fragment.cards
+package com.github.forrestdp.bankingapp.cards
 
 import android.os.Bundle
 import android.view.View
@@ -9,16 +9,14 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.FragmentCardsBinding
 import com.github.forrestdp.bankingapp.utils.launchAndCollectIn
-import com.github.forrestdp.bankingapp.viewmodel.CardsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import logcat.logcat
 
 @AndroidEntryPoint
 class CardsFragment : Fragment(R.layout.fragment_cards) {
 
-    private val viewModel: CardsViewModel by viewModels()
+    private val viewModel by viewModels<CardsViewModel>()
 
-    private val binding: FragmentCardsBinding by viewBinding(FragmentCardsBinding::bind)
+    private val binding by viewBinding(FragmentCardsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = CardsAdapter(

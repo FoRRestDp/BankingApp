@@ -1,9 +1,11 @@
 package com.github.forrestdp.bankingapp.repo.model.bankinginfo
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.math.BigDecimal
 import java.util.*
 
+@JsonClass(generateAdapter = true)
 data class CardUser(
     @Json(name = "card_number")
     val cardNumber: String,

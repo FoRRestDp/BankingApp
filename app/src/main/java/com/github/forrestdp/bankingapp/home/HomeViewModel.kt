@@ -1,7 +1,6 @@
-package com.github.forrestdp.bankingapp.viewmodel
+package com.github.forrestdp.bankingapp.home
 
 import androidx.lifecycle.*
-import com.github.forrestdp.bankingapp.fragment.home.LoadingStatus
 import com.github.forrestdp.bankingapp.repo.local.CardPreferencesRepository
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.CardUser
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.Transaction

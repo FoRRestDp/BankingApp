@@ -1,15 +1,12 @@
-package com.github.forrestdp.bankingapp.fragment.cards
+package com.github.forrestdp.bankingapp.cards
 
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.CardsListItemBinding
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
 import com.github.forrestdp.bankingapp.utils.setCardTypeImage
@@ -54,7 +51,7 @@ class CardsAdapter(
     }
 }
 
-class CardsDiffCallback : DiffUtil.ItemCallback<ShrunkCardInfo>() {
+private class CardsDiffCallback : DiffUtil.ItemCallback<ShrunkCardInfo>() {
     override fun areItemsTheSame(oldItem: ShrunkCardInfo, newItem: ShrunkCardInfo): Boolean =
         oldItem.cardNumber == newItem.cardNumber
 

@@ -1,5 +1,8 @@
 package com.github.forrestdp.bankingapp.di
 
+import com.github.forrestdp.bankingapp.di.qualifiers.DefaultDispatcher
+import com.github.forrestdp.bankingapp.di.qualifiers.IODispatcher
+import com.github.forrestdp.bankingapp.di.qualifiers.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,15 +28,3 @@ object DispatchersModule {
     @MainDispatcher
     fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class DefaultDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class IODispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class MainDispatcher

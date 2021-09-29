@@ -16,12 +16,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-private const val BANKING_INFO_BASE_URL = "https://hr.peterpartner.net/"
-private const val CURRENCY_INFO_BASE_URL = "https://www.cbr-xml-daily.ru/"
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    private const val BANKING_INFO_BASE_URL = "https://hr.peterpartner.net/"
+    private const val CURRENCY_INFO_BASE_URL = "https://www.cbr-xml-daily.ru/"
 
     @Provides
     fun provideMoshi(): Moshi = Moshi.Builder()

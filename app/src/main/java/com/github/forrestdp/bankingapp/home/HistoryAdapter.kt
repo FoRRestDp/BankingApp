@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.fragment.home
+package com.github.forrestdp.bankingapp.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,6 +15,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(HistoryDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
@@ -55,10 +56,10 @@ class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(Histo
                     .setScale(2, RoundingMode.HALF_UP)
                     .toString()
                 text = context.getString(
-                        R.string.history_transaction_amount_in_currency_string,
-                        char,
-                        roundedAmount,
-                    )
+                    R.string.history_transaction_amount_in_currency_string,
+                    char,
+                    roundedAmount,
+                )
             }
         }
 
@@ -82,9 +83,9 @@ class HistoryAdapter : ListAdapter<Transaction, HistoryAdapter.ViewHolder>(Histo
     }
 }
 
-class HistoryDiffCallback : DiffUtil.ItemCallback<Transaction>() {
+private class HistoryDiffCallback : DiffUtil.ItemCallback<Transaction>() {
     override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean =
-        oldItem.id == newItem.id
+        oldItem.date == newItem.date
 
     override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean =
         oldItem == newItem

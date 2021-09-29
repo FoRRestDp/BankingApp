@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.github.forrestdp.bankingapp.fragment.home.HomeFragment"
+        android:name="com.github.forrestdp.bankingapp.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/cardsFragment"
-        android:name="com.github.forrestdp.bankingapp.fragment.cards.CardsFragment"
+        android:name="com.github.forrestdp.bankingapp.cards.CardsFragment"
         android:label="fragment_cards"
         tools:layout="@layout/fragment_cards" >
     </fragment>

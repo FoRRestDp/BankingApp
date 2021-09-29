@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.viewmodel
+package com.github.forrestdp.bankingapp.cards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,21 +1,16 @@
 package com.github.forrestdp.bankingapp
 
 import androidx.core.view.isGone
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.forrestdp.bankingapp.activity.MainActivity
-import com.github.forrestdp.bankingapp.fragment.cards.CardsAdapter
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.BankingInfo
 import com.github.forrestdp.bankingapp.repo.network.bankinginfo.BankingInfoApiService
-import com.github.forrestdp.bankingapp.repo.network.bankinginfo.CardHoldersApi
 import com.github.forrestdp.bankingapp.utils.BaseRobot
 import kotlinx.coroutines.runBlocking
 
@@ -25,7 +20,6 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
-import retrofit2.Retrofit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -39,8 +33,8 @@ class MainActivityTests {
 
     @Before
     fun setup() = runBlocking {
-        retrofit = CardHoldersApi.retrofitService
-        bankingInfo = retrofit.getBankingInfo()
+//        retrofit = CardHoldersApi.retrofitService
+//        bankingInfo = retrofit.getBankingInfo()
     }
 
     @Test

@@ -2,12 +2,12 @@ package com.github.forrestdp.bankingapp.repo.model.bankinginfo
 
 import com.github.forrestdp.bankingapp.repo.model.currencyinfo.CurrencyCode
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.math.BigDecimal
 import java.util.*
 
+@JsonClass(generateAdapter = true)
 data class Transaction(
-    @Transient
-    val id: UUID = UUID.randomUUID(),
     @Transient
     val currencyCode: CurrencyCode = CurrencyCode.USD,
     @Transient

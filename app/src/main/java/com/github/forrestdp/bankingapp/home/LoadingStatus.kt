@@ -1,4 +1,4 @@
-package com.github.forrestdp.bankingapp.fragment.home
+package com.github.forrestdp.bankingapp.home
 
 enum class LoadingStatus {
     LOADING, ERROR, DONE,
