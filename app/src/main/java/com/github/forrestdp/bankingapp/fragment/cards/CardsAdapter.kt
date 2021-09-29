@@ -4,14 +4,20 @@ package com.github.forrestdp.bankingapp.fragment.cards
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.CardsListItemBinding
 import com.github.forrestdp.bankingapp.repo.model.bankinginfo.ShrunkCardInfo
+import com.github.forrestdp.bankingapp.utils.setCardTypeImage
 
-class CardsAdapter(private val selectedCardPosition: Int, private val clickListener: CardListener) :
-    ListAdapter<ShrunkCardInfo, CardsAdapter.ViewHolder>(CardsDiffCallback()) {
+class CardsAdapter(
+    private val selectedCardPosition: Int,
+    private val onClick: (position: Int) -> Unit,
+) : ListAdapter<ShrunkCardInfo, CardsAdapter.ViewHolder>(CardsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -19,20 +25,23 @@ class CardsAdapter(private val selectedCardPosition: Int, private val clickListe
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, position == selectedCardPosition, clickListener)
+        holder.bind(item, position, position == selectedCardPosition, onClick)
     }
 
     class ViewHolder private constructor(private val binding: CardsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ShrunkCardInfo, isSelected: Boolean, clickListener: CardListener) {
-            binding.cardInfo = item
-            if (isSelected) {
-                binding.cardsSelectedIndicatorImage.visibility = View.VISIBLE
-            } else {
-                binding.cardsSelectedIndicatorImage.visibility = View.INVISIBLE
+        fun bind(
+            item: ShrunkCardInfo,
+            position: Int,
+            isSelected: Boolean,
+            onItemClick: (position: Int) -> Unit,
+        ) = with(binding) {
+            binding.root.setOnClickListener {
+                onItemClick(position)
             }
-            binding.clickListener = clickListener
-            binding.executePendingBindings()
+            cardsCardTypeImage.setCardTypeImage(item.cardType)
+            cardsCardNumberText.text = item.cardNumber
+            cardsSelectedIndicatorImage.isVisible = isSelected
         }
 
         companion object {
@@ -47,13 +56,9 @@ class CardsAdapter(private val selectedCardPosition: Int, private val clickListe
 
 class CardsDiffCallback : DiffUtil.ItemCallback<ShrunkCardInfo>() {
     override fun areItemsTheSame(oldItem: ShrunkCardInfo, newItem: ShrunkCardInfo): Boolean =
-        oldItem.id == newItem.id
+        oldItem.cardNumber == newItem.cardNumber
 
     override fun areContentsTheSame(oldItem: ShrunkCardInfo, newItem: ShrunkCardInfo): Boolean =
         oldItem == newItem
 
-}
-
-class CardListener(val clickListener: (position: Long) -> Unit) {
-    fun onClick(cardInfo: ShrunkCardInfo) = clickListener(cardInfo.id)
 }

@@ -1,44 +1,41 @@
 package com.github.forrestdp.bankingapp.fragment.cards
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.forrestdp.bankingapp.R
 import com.github.forrestdp.bankingapp.databinding.FragmentCardsBinding
-import com.github.forrestdp.bankingapp.viewmodel.CommonViewModel
-import com.github.forrestdp.bankingapp.viewmodel.CommonViewModelFactory
+import com.github.forrestdp.bankingapp.utils.launchAndCollectIn
+import com.github.forrestdp.bankingapp.viewmodel.CardsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import logcat.logcat
 
-class CardsFragment : Fragment() {
+@AndroidEntryPoint
+class CardsFragment : Fragment(R.layout.fragment_cards) {
 
-    private val viewModel: CommonViewModel by activityViewModels()
+    private val viewModel: CardsViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        val binding = FragmentCardsBinding.inflate(layoutInflater, container, false)
+    private val binding: FragmentCardsBinding by viewBinding(FragmentCardsBinding::bind)
 
-        val adapter = CardsAdapter(viewModel.currentPosition.value!!, CardListener {
-            viewModel.setNewUser(it.toInt())
-            findNavController().navigateUp()
-        })
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val adapter = CardsAdapter(
+            viewModel.currentPosition.value,
+            onClick = {
+                viewModel.setNewUser(it)
+                findNavController().navigateUp()
+            }
+        )
         binding.cardsList.adapter = adapter
-        Log.i("CardsFragment", "${viewModel.shrunkCardInfos.value}")
-        viewModel.shrunkCardInfos.observe(viewLifecycleOwner) {
-            it?.let { adapter.submitList(it) }
+
+        viewModel.shrunkCardInfos.launchAndCollectIn(viewLifecycleOwner) {
+            logcat { "$it" }
+            it.let { adapter.submitList(it) }
         }
         binding.backButtonImg.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        return binding.root
     }
 }
