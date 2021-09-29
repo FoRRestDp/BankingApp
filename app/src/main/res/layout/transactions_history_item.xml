@@ -11,10 +11,10 @@
         android:layout_height="44dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:background="@drawable/operations_history_icon_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/operations_history_icon_bg">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/history_company_logo_image"

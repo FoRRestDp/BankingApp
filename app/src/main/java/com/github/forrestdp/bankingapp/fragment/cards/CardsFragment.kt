@@ -31,7 +31,6 @@ class CardsFragment : Fragment(R.layout.fragment_cards) {
         binding.cardsList.adapter = adapter
 
         viewModel.shrunkCardInfos.launchAndCollectIn(viewLifecycleOwner) {
-            logcat { "$it" }
             it.let { adapter.submitList(it) }
         }
         binding.backButtonImg.setOnClickListener {

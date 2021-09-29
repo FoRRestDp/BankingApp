@@ -5,8 +5,6 @@ import java.math.BigDecimal
 import java.util.*
 
 data class CardUser(
-    @Transient
-    val id: UUID = UUID.randomUUID(),
     @Json(name = "card_number")
     val cardNumber: String,
     @Json(name = "type")
@@ -21,7 +19,6 @@ data class CardUser(
 ) {
     companion object {
         val defaultUser = CardUser(
-            UUID.randomUUID(),
             "0000 0000 0000 0000",
             "mastercard",
             "Cardholder Name",

@@ -12,5 +12,4 @@
     <string name="eur" translatable="false">EUR</string>
     <string name="rub" translatable="false">RUB</string>
     <string name="history">History</string>
-    <string name="preference_last_position_key" translatable="false">com.github.forrestdp.bankingapp.LAST_POSITION</string>
 </resources>
